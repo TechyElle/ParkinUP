@@ -1,0 +1,40 @@
+flowchart TD
+    subgraph PageSetup["Page Setup"]
+        direction TB
+        InitImports["Import modules and set DB path"]
+        InitImports --> EnsureTables["Ensure DB tables exist and seed slots"]
+        EnsureTables --> InitLibs["Initialize optional libraries (CV2, PIL)"]
+        InitLibs --> CreateRoot["Create Tkinter root window (title, geometry, resizable)"]
+        CreateRoot --> SetupCanvas["Set up canvas with gradient background"]
+        SetupCanvas --> AddAnimHeader["Add animated header text"]
+        AddAnimHeader --> AddAnimCar["Add animated car emoji"]
+        AddAnimCar --> SetupClose["Set up on-close protocol"]
+        SetupClose --> CreateFrame["Create main content frame"]
+        CreateFrame --> DefineBtnStyle["Define button styles and event handlers"]
+        DefineBtnStyle --> DefineCoreFuncs["Define core functions (refresh table, update status, windows)"]
+        DefineCoreFuncs --> CreateBtns["Create action buttons (Park, Exit, View, etc.)"]
+        CreateBtns --> SetupCamArea["Set up camera preview area"]
+        SetupCamArea --> AddStatusLabel["Add status label"]
+        AddStatusLabel --> CreateMainTable["Create main vehicles table"]
+        CreateMainTable --> InitAndRun["Initialize table data and start mainloop"]
+    end
+
+    Start((Start)) --> CheckSlot["Check available slot"]
+    CheckSlot -->|Available| Park["Park vehicle: insert record, mark slot occupied"]
+    CheckSlot -->|Full| FullMsg["Show 'No available slots' message"]
+    Park --> Refresh["Refresh UI & show confirmation"]
+
+    Start --> ExitFlow["Exit Vehicle"]
+    ExitFlow --> FindVehicle["Find active vehicle record by plate"]
+    FindVehicle -->|Found| CalcFee["Calculate duration & fee"]
+    CalcFee --> UpdateDB["Update vehicle exit_time, free slot, insert payment"]
+    UpdateDB --> Receipt["Show receipt & refresh UI"]
+    FindVehicle -->|Not Found| NotFoundMsg["Show 'Not found' message"]
+
+    Start --> OCR["OCR Detect (simulated)"]
+    OCR -->|Image| OCRParse["Parse token from filename via stub"]
+    OCR -->|Manual| ManualEntry["User types plate"]
+    OCRParse --> PreFill["Open Park dialog pre-filled with plate"]
+    ManualEntry --> PreFill
+
+    style Start fill:#f9f,stroke:#333,stroke-width:2px
